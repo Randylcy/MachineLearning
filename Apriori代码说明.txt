@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Oct 13 20:35:53 2018
+
+@author: Administrator
+"""
+
+#Apriori  以一家法国商店为例，如何运用关联规则来更好的提升商品的销量
+ #通过在apyori.py文件中定义的方法来实现Apriori算法
+
+#importing the libraries
+import numpy as np
+import pandas as pd
+from matplotlib.pyplot import plot
+
+
+#importing the dataset
+file ='G:/[笔记]机器学习/data/Section 22- Apriori_Python/Market_Basket_Optimisation.csv'
+dataset =  pd.read_csv(file,header= None) #没有标题，所以header = None
+
+  #首先处理一下数据，让其成为在函数中的某个变量； 实现这一步，需要创造一个很大的数组，数组中每一个元素代表一次交易，这个元素本身也是一个数组；元素的数组代表这次交易里面的商品
+transactions = []
+#进行两次循环；第一次循环是对于每一次交易来说的
+for i in range(0,7501):
+    transactions.append([str(dataset.values[i,j]) for j in range(0,20)])  #dataset[i,j] 这样的形式不能直接被导入，导入的数dataset的值，因而是dataset.values
+                                                                     #添加的是数组，所以要写上[]
+
+# Training
+import apyori.py                                                             
+from apyori import apriori
+rules = apriori(transactions,min_support = 0.003, min_confidence = 0.2, min_lift = 3, min_length = 2  )
+     #希望得到的是卖出较多的商品的关联规律，对应的是每天至少卖出3-4次的商品， 因而最小的支持度为 3*7/7500 约等于0.003，
+     # 对于min_confidence，这个需要试错；刚开始将min_confidence设为0.8，没有得到任何规律；之后将0.8换为0.4，得到的规律没有太大意义（买水、鸡蛋多，因为在法国炒蛋，水都是日常所需的）；
+       #最终得到min_confidence= 0.2是个不错的值
+     #min_lift 和 min_confidence 一样，需要带入不同的值； 设置为3， 因为想得到提升度较高的规律
+     
+
+
+
+
+
+
+
+  
